@@ -8,19 +8,22 @@
         </a>
         <ul class="nav nav-pills">
           <!--로그인 아이콘-->
-          <li class="nav-item">
-            <a href="#" class="nav-link icon-link"><i class="bi bi-box-arrow-in-right"></i></a>
+          <li v-if="authStore.isLogin" class="nav-item nav-link">
+            {{authStore.nickname}}님 반갑습니다!
+          </li>
+          <li v-if="!authStore.isLogin" class="nav-item">
+            <a @click="router().push('/login')" class="nav-link icon-link"><i class="bi bi-box-arrow-in-right"></i></a>
           </li>
           <!--로그아웃 아이콘-->
-          <li class="nav-item">
-            <a href="#" class="nav-link icon-link"><i class="bi bi-box-arrow-right"></i></a>
+          <li @click="logout" v-if="authStore.isLogin" class="nav-item">
+            <a class="nav-link icon-link"><i class="bi bi-box-arrow-right"></i></a>
           </li>
           <!--회원가입 아이콘-->
-          <li class="nav-item">
-            <a href="#" class="nav-link icon-link"><i class="bi bi-person-plus-fill"></i></a>
+          <li v-if="!authStore.isLogin" class="nav-item">
+            <a @click="router().push('/signup')" class="nav-link icon-link"><i class="bi bi-person-plus-fill"></i></a>
           </li>
           <!--마이페이지 아이콘-->
-          <li class="nav-item">
+          <li v-if="authStore.isLogin" class="nav-item">
             <a href="#" class="nav-link icon-link"><i class="bi bi-person-circle"></i></a>
           </li>
         </ul>
@@ -31,12 +34,22 @@
 
 <script>
 import {router} from "@/router";
+import {useAuthStore} from "@/stores/auth";
 
 export default {
   name: "HeaderComponent",
   methods: {
     router() {
       return router
+    },
+    logout() {
+      useAuthStore().logout();
+      alert('로그아웃 완료');
+    }
+  },
+  computed: {
+    authStore() {
+      return useAuthStore();
     }
   }
 }
