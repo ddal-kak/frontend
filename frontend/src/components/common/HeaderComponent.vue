@@ -24,7 +24,7 @@
           </li>
           <!--마이페이지 아이콘-->
           <li v-if="authStore.isLogin" class="nav-item">
-            <a href="#" class="nav-link icon-link"><i class="bi bi-person-circle"></i></a>
+            <a @click="router().push('/my')" class="nav-link icon-link"><i class="bi bi-person-circle"></i></a>
           </li>
         </ul>
       </div>
