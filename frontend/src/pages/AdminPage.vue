@@ -39,6 +39,12 @@
             <textarea class="form-control" id="prizeDescription" v-model="prize.description" rows="3"></textarea>
           </div>
 
+          <!-- 이미지 파일 -->
+          <div class="mb-3">
+            <label for="prizeImage" class="form-label">상품 이미지</label>
+            <input type="file" class="form-control" id="prizeImage" @change="handleFileChange" accept="image/*">
+          </div>
+
           <div class="d-grid gap-2">
             <button type="submit" class="btn btn-primary">등록하기</button>
           </div>
@@ -53,6 +59,7 @@ import { ref, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { router } from '@/router';
 import { apiInstance } from '@/api/index.js';
+import axios from 'axios'; // axios for direct PUT to presigned URL
 
 export default {
   name: 'AdminPage',
@@ -60,22 +67,25 @@ export default {
     const authStore = useAuthStore();
     const api = apiInstance();
 
-    // DTO 구조에 맞춘 반응형 객체
     const prize = ref({
       name: '',
       quantity: 0,
       price: 0,
       probabilityRange: 1,
-      imageUrl: 'example.url', // 고정값
+      imageUrl: '', // Change to empty string
       description: ''
     });
 
-    // 새 상품 등록 API 호출 함수
+    const selectedFile = ref(null); // New ref for selected file
+
+    const handleFileChange = (event) => {
+      selectedFile.value = event.target.files[0];
+    };
+
     const addPrize = (data) => {
       return api.post('/prizes', data);
     };
 
-    // 관리자 권한 확인
     onMounted(() => {
       if (!authStore.isAdmin) {
         alert('관리자만 접근 가능합니다.');
@@ -83,13 +93,40 @@ export default {
       }
     });
 
-    // 폼 제출 (등록)
     const handleSubmit = async () => {
       try {
-        // prize 객체가 이미 DTO와 동일한 구조를 가짐
+        if (selectedFile.value) {
+          // 1. Get presigned URL
+          const fileName = selectedFile.value.name;
+          const presignResponse = await api.get(`/presign?fileName=${fileName}`);
+          const presignedUrl = presignResponse.data.url;
+          // const imageUrl = presignResponse.data.imageUrl; // This is the absolute path to be saved in DB
+
+          // Parse the absolute path from presignedUrl
+
+          const absoluteImagePath = new URL(presignedUrl).pathname;
+
+          // 2. Assign parsed absolute path to prize.imageUrl
+          prize.value.imageUrl = absoluteImagePath;
+
+
+          // 3. Upload image to presigned URL
+          await axios.put(presignedUrl, selectedFile.value, {
+            headers: {
+              // 에러 가능
+              'Content-Type': selectedFile.value.type,
+            },
+          });
+          alert('이미지 업로드 성공!');
+        } else {
+          // If no file selected, set imageUrl to a default or handle as needed
+          prize.value.imageUrl = 'default.url'; // Or handle error/warning
+        }
+
+        // 4. Register product information
         await addPrize(prize.value);
         alert('상품이 성공적으로 등록되었습니다.');
-        resetForm(); // 등록 성공 후 폼 초기화
+        resetForm();
       } catch (error) {
         console.error('상품 등록 중 오류 발생:', error);
         const errorMessage = error.response?.data?.message || '오류가 발생했습니다. 콘솔을 확인해주세요.';
@@ -97,21 +134,22 @@ export default {
       }
     };
 
-    // 폼 초기화 함수
     const resetForm = () => {
       prize.value = {
         name: '',
         quantity: 0,
         price: 0,
         probabilityRange: 1,
-        imageUrl: 'example.url',
+        imageUrl: '', // Reset imageUrl
         description: ''
       };
+      selectedFile.value = null; // Reset selected file
     };
 
     return {
       prize,
-      handleSubmit
+      handleSubmit,
+      handleFileChange // Expose handleFileChange
     };
   }
 };
