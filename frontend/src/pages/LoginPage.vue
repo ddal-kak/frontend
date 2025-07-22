@@ -44,7 +44,8 @@ export default {
               alert("로그인 완료");
               const nickname = response.data.name;
               const memberId = response.data.memberId;
-              useAuthStore().save(nickname, memberId);
+              const roles = response.data.roles;
+              useAuthStore().save(nickname, memberId, roles);
               this.$router.push('/')
             }
           })

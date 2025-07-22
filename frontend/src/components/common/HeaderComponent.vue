@@ -26,6 +26,10 @@
           <li v-if="authStore.isLogin" class="nav-item">
             <a @click="router().push('/my')" class="nav-link icon-link"><i class="bi bi-person-circle"></i></a>
           </li>
+          <!--관리자페이지 아이콘-->
+          <li v-if="authStore.isAdmin" class="nav-item">
+            <a @click="router().push('/admin')" class="nav-link icon-link"><i class="bi bi-gear-fill"></i></a>
+          </li>
         </ul>
       </div>
     </div>
