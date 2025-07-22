@@ -23,7 +23,7 @@ export default {
 
 <style scoped>
 .footer-container {
-  background-color: #E0F2F7; /* 연한 하늘색 */
+  background: linear-gradient(to right, #83a4d4, #b6fbff);
   border-top: 1px solid #B3E0F2;
 }
 
