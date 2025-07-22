@@ -3,8 +3,7 @@
     <div class="container">
       <div class="d-flex flex-wrap justify-content-between align-items-center py-3">
         <a @click="router().push('/')" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-          <i class="bi bi-gift-fill logo-icon me-2"></i>
-          <span class="fs-4">Home</span>
+          <span class="logo-text">Ddal-kak</span>
         </a>
         <ul class="nav nav-pills">
           <!--로그인 아이콘-->
@@ -57,13 +56,15 @@ export default {
 
 <style scoped>
 .header-container {
-  background-color: #E0F2F7; /* 연한 하늘색 */
+  background: linear-gradient(to right, #83a4d4, #b6fbff);
   border-bottom: 1px solid #B3E0F2;
 }
 
-.logo-icon {
-  font-size: 30px;
+.logo-text {
+  font-family: 'Pacifico', cursive;
+  font-size: 2rem;
   color: #2c3e50;
+  text-decoration: none;
 }
 
 .container {
