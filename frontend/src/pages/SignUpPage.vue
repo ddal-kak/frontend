@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     signUpRequest() {
-      axiosInstance.post('/member', this.signUpDto)
+      axiosInstance.post('/members', this.signUpDto)
           .then(response => {
             if (response.status === 200) {
               alert('회원가입 완료');
