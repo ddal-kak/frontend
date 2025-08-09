@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     signInRequest() {
-      axiosInstance.post('/login', this.loginDto)
+      axiosInstance.post('/auth/login', this.loginDto)
           .then(response => {
             if (response.status === 200) {
               alert("로그인 완료");
