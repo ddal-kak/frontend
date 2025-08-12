@@ -9,20 +9,6 @@ function apiInstance() {
             "Content-Type": 'application/json;charset=utf-8'
         },
     });
-    instance.interceptors.response.use(
-        response => response,
-        error => {
-            if (error.response && error.response.status === 401) {
-                const authStore = useAuthStore();
-                authStore.logout();
-                alert(error.response.data);
-                router.push('/login');
-            } else if (error.response && error.response.status === 403) {
-                alert(error.response.data);
-            }
-            return Promise.reject(error);
-        }
-    );
     return instance;
 }
 
