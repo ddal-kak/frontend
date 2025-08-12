@@ -105,7 +105,6 @@ export default {
           // Parse the absolute path from presignedUrl
 
           const absoluteImagePath = new URL(presignedUrl).pathname;
-
           // 2. Assign parsed absolute path to prize.imageUrl
           prize.value.imageUrl = absoluteImagePath;
 
@@ -113,8 +112,7 @@ export default {
           // 3. Upload image to presigned URL
           await axios.put(presignedUrl, selectedFile.value, {
             headers: {
-              // 에러 가능
-              'Content-Type': selectedFile.value.type,
+              'Content-Type': selectedFile.value.type
             },
           });
           alert('이미지 업로드 성공!');
