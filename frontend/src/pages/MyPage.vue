@@ -40,10 +40,10 @@
         <ul class="list-group list-group-flush" v-if="winnings.length > 0">
           <li v-for="winning in winnings" :key="winning.id" class="list-group-item d-flex justify-content-between align-items-center">
             <div>
-              <span class="fw-bold">{{ winning.itemName }}</span>
+              <span class="fw-bold">{{ winning.prizeName }}</span>
               <span class="badge ms-2" :class="getResultBadgeClass(winning.result)">{{ winning.result }}</span>
             </div>
-            <span class="badge bg-secondary rounded-pill">{{ winning.date }}</span>
+            <span class="badge bg-secondary rounded-pill">{{ winning.dateTime }}</span>
           </li>
         </ul>
         <p v-else class="card-text">아직 당첨 내역이 없습니다.</p>
@@ -87,19 +87,15 @@ export default {
           })
           .catch(error => {
             console.error("회원 정보 조회 실패:", error);
-            // Mock 데이터 사용
-            this.userInfo = { name: '이동우', email: 'test@example.com' };
           });
 
       // 보유 응모권 개수 조회
       axios.get(`/tickets/members/${memberId}`)
           .then(response => {
-            this.ticketCount = response.data.count;
+            this.ticketCount = response.data.quantity;
           })
           .catch(error => {
             console.error("응모권 개수 조회 실패:", error);
-            // Mock 데이터 사용
-            this.ticketCount = 5;
           });
 
       // 당첨 내역 조회
@@ -109,12 +105,6 @@ export default {
           })
           .catch(error => {
             console.error("당첨 내역 조회 실패:", error);
-            // Mock 데이터 사용
-            this.winnings = [
-              { id: 1, itemName: '스타벅스 아메리카노', date: '2023-10-26', result: 'WIN'},
-              { id: 2, itemName: '신세계 상품권 5만원', date: '2023-10-20', result: 'LOSE' },
-              { id: 3, itemName: 'BHC 치킨', date: '2023-09-15', result: 'LOSE' }
-            ];
           });
     }
   }

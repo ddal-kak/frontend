@@ -71,7 +71,7 @@ export default {
           this.lastId = this.prizes[this.prizes.length - 1].id;
         }
       }).catch(error => {
-        console.error("error occur", error)
+        console.error("error occur", error.response.data.message)
       }).finally(() => {
         this.isLoading = false;
       });
@@ -82,7 +82,7 @@ export default {
             alert("응모 완료! 잠시 후 마이페이지에서 결과를 확인해보세요.")
           })
           .catch(error => {
-            console.error("error occur", error)
+            console.error("error occur", error.response.data.message)
           })
     },
     loadMore() {
