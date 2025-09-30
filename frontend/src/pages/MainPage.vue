@@ -82,6 +82,7 @@ export default {
             alert("응모 완료! 잠시 후 마이페이지에서 결과를 확인해보세요.")
           })
           .catch(error => {
+            alert(error.response.data.message);
             console.error("error occur", error.response.data.message)
           })
     },
